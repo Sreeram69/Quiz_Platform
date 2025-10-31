@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VokeyQuiz</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Background animation container -->
+<div class="bg-animation"></div>
+
+<!-- Theme Toggle -->
+<button id="theme-toggle" class="theme-btn">
+  <span class="toggle-circle"></span>
+</button>
+<!-- Greeting Modal -->
+<div id="greeting-modal" class="modal">
+  <div class="modal-content">
+    <h2>👋 Welcome!</h2>
+    <br><br>
+    <img src="assets/w.jpg" alt="Welcome Image" class="welcome-img">
+    <b><p>Ready to test your knowledge?</p></b>
+    <button class="btn" id="start-btn">Let's Go 🚀</button>
+  </div>
+</div>
+
+<!-- Quiz Input -->
+<div class="quiz-container hidden" id="quiz-input">
+  <h1>Paste Your Quiz Questions</h1>
+  <textarea id="questions-text" placeholder="Question: [Write your question here]
+Options:
+a) [Option 1]
+b) [Option 2]
+c) [Option 3]
+d) [Option 4]
+Answer: [Correct option with letter]"></textarea>
+  <button class="btn" id="generate-btn">Generate Quiz</button>
+</div>
+
+<!-- Quiz Page -->
+<div id="quiz-page" class="quiz-container hidden">
+  <h1>Quiz</h1>
+  <div id="question-box">
+    <h2 id="question-text"></h2>
+    <div id="options"></div>
+    <div class="quiz-footer">
+      <span id="timer">Time Left: 15s</span>
+      <div class="btn-group">
+        <button id="next-btn" class="btn">Next</button>
+        <button id="submit-btn" class="btn">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="result-box" class="hidden">
+  <img id="result-image" src="" alt="Result Image" style="width:200px; margin:15px 0; border-radius:15px;">    <h2 id="result-title"></h2>
+    <p id="score-text"></p>
+    <button id="restart-btn" class="btn hidden">Start Again</button>
+  </div>
+</div>
+
+<!-- <div id="live-users">👥 Loading users...</div> -->
+
+
+<!-- Sidebar -->
+
+<button id="sidebar-toggle" class="sidebar-toggle">➡️</button>
+<div class="sidebar" id="sidebar"></div>
+
+
+<script data-goatcounter="https://sreeram69.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
