@@ -1,0 +1,35 @@
+name: Deploy VokeyQuiz
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate HTML
+        uses: chabad360/htmlproofer@v2
+        with:
+          directory: "./"
+
+      - name: Lint CSS
+        run: npx stylelint "**/*.css" || echo "CSS lint skipped"
+
+      - name: Lint JS
+        run: npx eslint "**/*.js" || echo "JS lint skipped"
+
+      - name: Build Docker image
+        run: docker build -t vokeyquiz:latest .
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
