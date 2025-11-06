@@ -3,10 +3,10 @@ const greetingModal = document.getElementById("greeting-modal");
 const startBtn = document.getElementById("start-btn");
 const quizInput = document.getElementById("quiz-input");
 const generateBtn = document.getElementById("generate-btn");
-const convertBtn = document.createElement("button"); // new Convert button
+const convertBtn = document.createElement("button");
 convertBtn.textContent = "Convert ✅";
-convertBtn.className = "btn"; // same CSS class as your buttons
-generateBtn.parentNode.insertBefore(convertBtn, generateBtn.nextSibling); // place beside Generate
+convertBtn.className = "btn";
+generateBtn.parentNode.insertBefore(convertBtn, generateBtn.nextSibling);
 
 const quizPage = document.getElementById("quiz-page");
 const questionText = document.getElementById("question-text");
@@ -29,8 +29,8 @@ for (let i = 0; i < 30; i++) {
   const span = document.createElement("span");
   span.textContent = floatText[Math.floor(Math.random() * floatText.length)];
   span.style.left = Math.random() * 100 + "vw";
-  span.style.fontSize = (12 + Math.random()*24) + "px";
-  span.style.animationDuration = (15 + Math.random()*15) + "s";
+  span.style.fontSize = (12 + Math.random() * 24) + "px";
+  span.style.animationDuration = (15 + Math.random() * 15) + "s";
   bgContainer.appendChild(span);
 }
 
@@ -41,7 +41,7 @@ let currentSet = [], currentIndex = 0, score = 0, timer, timeLeft = 15, answered
 startBtn.addEventListener("click", () => {
   greetingModal.style.display = "none";
   quizInput.classList.remove("hidden");
-  sidebar.classList.add("hidden"); // hide sidebar on input page
+  sidebar.classList.add("hidden");
 });
 
 // ===== Convert to Quiz Format =====
@@ -69,7 +69,7 @@ convertBtn.addEventListener("click", () => {
       tempOptions.push(line.replace(/^[A-D]\.\s*/, ""));
     } else if (/^Answer:/i.test(line)) {
       const letter = line.match(/[A-D]/i)[0].toLowerCase();
-      tempAnswer = { a:0, b:1, c:2, d:3 }[letter];
+      tempAnswer = { a: 0, b: 1, c: 2, d: 3 }[letter];
     }
   });
 
@@ -79,10 +79,9 @@ convertBtn.addEventListener("click", () => {
 
   if (!formatted.length) return alert("No valid questions found to convert!");
 
-  // Replace textarea with JSON-like structure for Generate button
   const newText = formatted.map((q, i) => {
-    const optText = q.options.map((o,j)=> String.fromCharCode(65+j)+") "+o).join("\n");
-    const ansLetter = Object.keys({a:0,b:1,c:2,d:3}).find(k=> ({a:0,b:1,c:2,d:3}[k]===q.answer));
+    const optText = q.options.map((o, j) => String.fromCharCode(65 + j) + ") " + o).join("\n");
+    const ansLetter = Object.keys({ a: 0, b: 1, c: 2, d: 3 }).find(k => ({ a: 0, b: 1, c: 2, d: 3 }[k] === q.answer));
     return `Question: ${q.question}\n${optText}\nAnswer: ${ansLetter}`;
   }).join("\n\n");
 
@@ -95,7 +94,7 @@ generateBtn.addEventListener("click", () => {
   const raw = document.getElementById("questions-text").value.trim();
   if (!raw) return alert("Please paste your questions!");
 
-  const blocks = raw.split(/\n\s*\n/); 
+  const blocks = raw.split(/\n\s*\n/);
   const quizData = [];
 
   for (let block of blocks) {
@@ -109,7 +108,6 @@ generateBtn.addEventListener("click", () => {
     if (!match) continue;
     const answerLetter = match[1].toLowerCase();
 
-    // Map letter to index
     const letterMap = { a: 0, b: 1, c: 2, d: 3 };
     const answerIndex = letterMap[answerLetter];
 
@@ -119,11 +117,12 @@ generateBtn.addEventListener("click", () => {
     const options = lines
       .filter(l => /^[a-d]\)/i.test(l))
       .map(l => l.replace(/^[a-d]\)\s*/i, ""));
-    
+
     if (options.length && answerIndex < options.length) {
       quizData.push({ question, options, answer: answerIndex });
     }
   }
+
   if (!quizData.length) return alert("⚠️ No valid questions found!");
 
   currentSet = quizData;
@@ -133,13 +132,13 @@ generateBtn.addEventListener("click", () => {
 
   quizInput.style.display = "none";
   quizPage.classList.remove("hidden");
-  sidebar.classList.remove("hidden"); // show sidebar only now
+  sidebar.classList.remove("hidden");
 
   buildSidebar();
   loadQuestion();
 });
 
-// ===== Load Question =====
+// ===== Load Question (No random order) =====
 function loadQuestion() {
   const q = currentSet[currentIndex];
   questionText.textContent = q.question;
@@ -164,7 +163,6 @@ function loadQuestion() {
     submitBtn.classList.add("hidden");
   }
 }
-
 
 // ===== Check Answer =====
 function checkAnswer(selected, element) {
@@ -310,5 +308,6 @@ function lockSidebarButton(index) {
 nextBtn.addEventListener("click", nextQuestion);
 submitBtn.addEventListener("click", submitQuiz);
 restartBtn.addEventListener("click", resetQuiz);
-themeToggle.addEventListener("click", () => { document.body.classList.toggle("dark-mode"); });
-
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+});
