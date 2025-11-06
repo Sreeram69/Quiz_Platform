@@ -102,24 +102,29 @@ generateBtn.addEventListener("click", () => {
     const lines = block.split("\n").map(l => l.trim()).filter(l => l);
     if (lines.length < 2) continue;
 
-    const ansLine = lines.find(l => l.toLowerCase().startsWith("answer:"));
+    const ansLine = lines.find(l => /^answer\s*:/i.test(l));
     if (!ansLine) continue;
 
-    const answerLetterMatch = ansLine.match(/[a-dA-D]/);
-    if (!answerLetterMatch) continue;
-    const answerLetter = answerLetterMatch[0].toLowerCase();
+    const match = ansLine.match(/answer\s*:\s*([a-d])/i);
+    if (!match) continue;
+    const answerLetter = match[1].toLowerCase();
 
+    // Map letter to index
     const letterMap = { a: 0, b: 1, c: 2, d: 3 };
     const answerIndex = letterMap[answerLetter];
 
-    const questionLines = lines.filter(l => !l.toLowerCase().startsWith("answer:"));
-    const question = questionLines[0].replace(/^Question:\s*/i, "");
-    const options = questionLines.slice(1).map(l => l.replace(/^[a-dA-D]\)\s*/, ""));
+    const questionLine = lines.find(l => /^question\s*:/i.test(l)) || lines[0];
+    const question = questionLine.replace(/^question\s*:\s*/i, "");
 
-    quizData.push({ question, options, answer: answerIndex });
+    const options = lines
+      .filter(l => /^[a-d]\)/i.test(l))
+      .map(l => l.replace(/^[a-d]\)\s*/i, ""));
+    
+    if (options.length && answerIndex < options.length) {
+      quizData.push({ question, options, answer: answerIndex });
+    }
   }
-
-  if (!quizData.length) return alert("No valid questions found!");
+  if (!quizData.length) return alert("⚠️ No valid questions found!");
 
   currentSet = quizData;
   currentIndex = 0;
@@ -132,8 +137,6 @@ generateBtn.addEventListener("click", () => {
 
   buildSidebar();
   loadQuestion();
-
-  setTimeout(() => currentSet = [], 3600 * 1000);
 });
 
 // ===== Load Question =====
@@ -161,6 +164,7 @@ function loadQuestion() {
     submitBtn.classList.add("hidden");
   }
 }
+
 
 // ===== Check Answer =====
 function checkAnswer(selected, element) {
@@ -307,3 +311,4 @@ nextBtn.addEventListener("click", nextQuestion);
 submitBtn.addEventListener("click", submitQuiz);
 restartBtn.addEventListener("click", resetQuiz);
 themeToggle.addEventListener("click", () => { document.body.classList.toggle("dark-mode"); });
+
